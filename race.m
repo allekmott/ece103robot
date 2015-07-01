@@ -1,8 +1,10 @@
 function [] = race(address)
 
+fprintf('Initializing...\n');
+
 brick = lego.NXT(address);
 
-%assign sensors
+%assign sensor ports
 lightSensor = lego.NXT.IN_1;
 leftWheel = lego.NXT.OUT_A;
 rightWheel = lego.NXT.OUT_C;
@@ -10,30 +12,55 @@ rightWheel = lego.NXT.OUT_C;
 %both wheels together
 wheels = lego.NXT.OUT_AC;
 
-brick.setSensorColorFull(lightSensor);
-
-%(port,power,turnRatio) 0 = straight ahead, -100 to 100
-
-while true
-
-brick.motorForwardSync(wheels,50,50);
-pause(.1);
-
+% brick.setSensorColorFull(lightSensor);
+% ^ old; initializes color sensor in RGB mode
+initColorSensor = brick.setInputMode(lightSensor, 15, 0);
+if initColorSensor == 0
+    fprintf('\tReset light sensor\n');
+    brick.resetInputScaledValue(lightSensor);
 end
-%findStart(brick)
 
-%follow line until RED
-    %then return
-%handle first interaction
+% (port,power,turnRatio) 0 = straight ahead, -100 to 100
 
-%findLine()
+% initial state, move forward until you see blue
+STATE_MOVE_TO_LINE = 0;
 
-%followLine 
+% line follow state, follow line until interrupted
+STATE_FOLLOW_LINE = 1;
 
-pause(1); %stops entire thread
-%may be better to use tic/toc or timeelapsed
-sensorData = brick.sensorValue(lightSensor);
+% interrupted, process through interaction
+STATE_INTERACTION = 2;
 
-imperialMarch(brick);
+% see black, play song and then end
+STATE_SONG = 3;
+
+% finished with maze, terminate process
+STATE_END = -1;
+
+% initial
+state = STATE_MOVE_TO_LINE
+
+
+fprintf('Begin state interation; state = %d', state);
+while state >= 0
+	switch state
+		case STATE_MOVE_TO_LINE
+			state = moveToLine(brick);
+			continue
+		case STATE_FOLLOW_LINE
+			state = followLine(brick);
+			continue
+		case STATE_INTERACTION
+			state = processInteract(brick);
+			continue
+		case STATE_SONG
+			state = imperialMarch(brick);
+			continue
+	end
+end
+
+% end state
 fprintf('Done?');
+
+% Terminate NXT process
 brick.close();
