@@ -1,27 +1,9 @@
 function [] = race(address)
 
 fprintf('Initializing...\n');
+brick = initializeBrick();
 
-brick = lego.NXT(address);
-
-% assign sensor ports
-lightSensor = lego.NXT.IN_1;
-leftWheel = lego.NXT.OUT_A;
-rightWheel = lego.NXT.OUT_C;
-
-% both wheels together
-wheels = lego.NXT.OUT_AC;
-
-% brick.setSensorColorFull(lightSensor);
-% ^ old; initializes color sensor in RGB mode
-initColorSensor = brick.setInputMode(lightSensor, 15, 0);
-if initColorSensor == 0
-    fprintf('\tReset light sensor\n');
-    brick.resetInputScaledValue(lightSensor);
-end
-
-% (port,power,turnRatio) 0 = straight ahead, -100 to 100
-
+% sensor initialization moved to initializeBrick()
 
 % initial state
 state = States.FOLLOW_LINE;
