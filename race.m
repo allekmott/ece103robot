@@ -1,4 +1,4 @@
-function [] = race(address)
+function [] = race()
 
 fprintf('Initializing...\n');
 brick = initializeBrick();
@@ -8,7 +8,7 @@ brick = initializeBrick();
 % initial state
 state = States.FOLLOW_LINE;
 
-fprintf('Begin state interation; state = %d', state);
+fprintf('Begin state interation; state = %d\n', state);
 while state >= 0 % End state = -1
 	switch state
 		case States.MOVE_TO_LINE
