@@ -1,6 +1,12 @@
 function [] = race()
 
 fprintf('Initializing...\n');
+
+%close cmd need removed after implementation into race
+brick.close();
+fprintf('Clearing brick object\n');
+
+
 brick = initializeBrick();
 
 % sensor initialization moved to initializeBrick()
