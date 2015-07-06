@@ -1,8 +1,8 @@
-function [brick] = intializeBrick()
+function [brick] = initializeBrick()
 % Make connection with robot using hardcoded address and returns the initialized brick object
 % Additionaly prints to console the firmware version and battery level
 
-brick = lego.NXT(address);
+brick = lego.NXT('00165311686b');
 fprintf('---BRICK INITIALIZED---\n');
 
 % TODO - set port locations as constants for global use
