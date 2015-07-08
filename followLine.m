@@ -21,11 +21,14 @@ rightWheel = lego.NXT.OUT_C;
 %kill motors
 brick.motorReverseSync(wheels, 0, 0);
 
-avgLight = 370; % 337
+
 
 MAX_POWER = 40;
 MIN_POWER = 20;
 MAX_STEER = 100;
+
+avgLight = 400; % 337
+BLUE_THRESH = -35; % threshold until hard turn in blue
 
 while true
     power = MAX_POWER;
@@ -42,7 +45,7 @@ while true
 
     if diff < -20 % left; over blue
         fprintf('blue\n');
-        if (diff < -40) % realllly blue; turn HARD
+        if (diff < BLUE_THRESH) % realllly blue; turn HARD
             brick.motorForward(leftWheel, 35);
             brick.motorReverse(rightWheel, 35);
             pause(.3);
