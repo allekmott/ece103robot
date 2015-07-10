@@ -8,7 +8,7 @@ wheels = lego.NXT.OUT_AC;
 brick.motorReverseSync(wheels, 30, 0);
 
 senseValue = brick.sensorValue(lightSensor);
-while ~(senseValue > 280 && senseValue < 350)
+while ~(senseValue > 290 && senseValue < 320)
     fprintf('Moving to line\n');
     brick.motorReverseSync(wheels, 40, 0);
     senseValue = brick.sensorValue(lightSensor);
